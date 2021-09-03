@@ -53,6 +53,12 @@ class RecipeServiceImplTest {
         Recipe searchedRecipe = recipeService.findById(1L);
         assertNotNull(searchedRecipe);
         verify(recipeRepository).findById(anyLong());
+    }
 
+    @Test
+    void deleteById() {
+        recipeService.deleteById( 1L );
+
+        verify(recipeRepository).deleteById(anyLong());
     }
 }
