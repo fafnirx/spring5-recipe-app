@@ -2,6 +2,7 @@ package guru.springframework.converters;
 
 import guru.springframework.commands.RecipeCommand;
 import guru.springframework.domain.Category;
+import guru.springframework.domain.Notes;
 import guru.springframework.domain.Recipe;
 import lombok.Synchronized;
 import org.springframework.core.convert.converter.Converter;
@@ -29,11 +30,8 @@ public class RecipeToRecipeCommand implements Converter<Recipe, RecipeCommand>{
     @Nullable
     @Override
     public RecipeCommand convert(Recipe source) {
-        if (source == null) {
-            return null;
-        }
-
         final RecipeCommand command = new RecipeCommand();
+
         command.setId(source.getId());
         command.setCookTime(source.getCookTime());
         command.setPrepTime(source.getPrepTime());
@@ -43,7 +41,11 @@ public class RecipeToRecipeCommand implements Converter<Recipe, RecipeCommand>{
         command.setServings(source.getServings());
         command.setSource(source.getSource());
         command.setUrl(source.getUrl());
-        command.setNotes(notesConverter.convert(source.getNotes()));
+
+        Notes notes = source.getNotes();
+        if (notes != null) {
+            command.setNotes(notesConverter.convert(notes));
+        }
 
         if (source.getCategories() != null && source.getCategories().size() > 0){
             source.getCategories()

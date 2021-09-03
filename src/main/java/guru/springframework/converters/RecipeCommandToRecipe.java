@@ -1,5 +1,6 @@
 package guru.springframework.converters;
 
+import guru.springframework.commands.NotesCommand;
 import guru.springframework.commands.RecipeCommand;
 import guru.springframework.domain.Recipe;
 import lombok.Synchronized;
@@ -28,10 +29,6 @@ public class RecipeCommandToRecipe implements Converter<RecipeCommand, Recipe> {
     @Nullable
     @Override
     public Recipe convert(RecipeCommand source) {
-        if (source == null) {
-            return null;
-        }
-
         final Recipe recipe = new Recipe();
         recipe.setId(source.getId());
         recipe.setCookTime(source.getCookTime());
@@ -42,7 +39,10 @@ public class RecipeCommandToRecipe implements Converter<RecipeCommand, Recipe> {
         recipe.setServings(source.getServings());
         recipe.setSource(source.getSource());
         recipe.setUrl(source.getUrl());
-        recipe.setNotes(notesConverter.convert(source.getNotes()));
+        NotesCommand notes = source.getNotes();
+        if (notes != null) {
+            recipe.setNotes(notesConverter.convert(notes));
+        }
 
         if (source.getCategories() != null && source.getCategories().size() > 0){
             source.getCategories()

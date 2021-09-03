@@ -2,30 +2,32 @@ package guru.springframework.converters;
 
 import guru.springframework.commands.CategoryCommand;
 import guru.springframework.domain.Category;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class CategoryCommandToCategoryTest {
+class CategoryCommandToCategoryTest {
 
-    public static final Long ID_VALUE = new Long(1L);
+    public static final Long ID_VALUE = Long.valueOf(1L);
     public static final String DESCRIPTION = "description";
-    CategoryCommandToCategory conveter;
+    CategoryCommandToCategory converter;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
-        conveter = new CategoryCommandToCategory();
+        converter = new CategoryCommandToCategory();
     }
 
     @Test
-    public void testNullObject() throws Exception {
-        assertNull(conveter.convert(null));
+    public void testNullObject() {
+        assertThrows(NullPointerException.class, () -> {
+            converter.convert(null);
+        });
     }
 
     @Test
-    public void testEmptyObject() throws Exception {
-        assertNotNull(conveter.convert(new CategoryCommand()));
+    public void testEmptyObject() {
+        assertNotNull(converter.convert(new CategoryCommand()));
     }
 
     @Test
@@ -36,7 +38,7 @@ public class CategoryCommandToCategoryTest {
         categoryCommand.setDescription(DESCRIPTION);
 
         //when
-        Category category = conveter.convert(categoryCommand);
+        Category category = converter.convert(categoryCommand);
 
         //then
         assertEquals(ID_VALUE, category.getId());
