@@ -14,9 +14,6 @@ public class UnitOfMeasureCommandToUnitOfMeasure implements Converter<UnitOfMeas
     @Nullable
     @Override
     public UnitOfMeasure convert(UnitOfMeasureCommand unitOfMeasureCommand) {
-        if (unitOfMeasureCommand == null) {
-            return null;
-        }
         final UnitOfMeasure uom = new UnitOfMeasure();
         uom.setId(unitOfMeasureCommand.getId());
         uom.setDescription(unitOfMeasureCommand.getDescription());
