@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class UnitOfMeasureServiceImpl {
+public class UnitOfMeasureServiceImpl implements UnitOfMeasureService{
     private final UnitOfMeasureRepository unitOfMeasureRepository;
 
     public UnitOfMeasureServiceImpl(UnitOfMeasureRepository unitOfMeasureRepository) {
