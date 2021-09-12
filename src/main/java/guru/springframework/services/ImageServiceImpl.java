@@ -21,7 +21,7 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public void saveImageFile(Long id, MultipartFile file) {
-        log.debug("Saving image file with id %d and name %s", id, file.getName());
+        log.debug("Saving image file with id {} and name {}", id, file.getName());
 
         Optional<Recipe> recipeOptional = recipeRepository.findById(id);
 
