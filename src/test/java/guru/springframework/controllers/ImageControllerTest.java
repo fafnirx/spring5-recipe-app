@@ -9,15 +9,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -66,5 +67,34 @@ class ImageControllerTest {
                 .andExpect(header().string("Location", "/recipe/1/show"));
 
         verify(imageService, times(1)).saveImageFile(anyLong(), any());
+    }
+
+    @Test
+    void renderImageFromDB() throws Exception {
+        //given
+        String s="Some fake image data, actually a string";
+        RecipeCommand recipeCommand = createRecipeCommandWithImage(s);
+
+        when(recipeService.findCommandById(anyLong())).thenReturn(recipeCommand);
+
+        MockHttpServletResponse response = mockMvc.perform(get("/recipe/1/recipeimage"))
+                .andExpect(status().isOk())
+                .andReturn().getResponse();
+
+        byte[] contentAsByteArray = response.getContentAsByteArray();
+        assertEquals(s.getBytes().length, contentAsByteArray.length);
+    }
+
+    private RecipeCommand createRecipeCommandWithImage(String s) {
+        RecipeCommand recipeCommand = new RecipeCommand();
+        recipeCommand.setId(1L);
+
+        Byte[] byteArray = new Byte[s.getBytes().length];
+        int i=0;
+        for (byte primeByte : s.getBytes()) {
+            byteArray[i++] = primeByte;
+        }
+        recipeCommand.setImage(byteArray);
+        return recipeCommand;
     }
 }

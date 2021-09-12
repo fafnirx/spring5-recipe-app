@@ -75,6 +75,8 @@ public class RecipeToRecipeCommandTest {
         recipe.getIngredients().add(ingredient);
         recipe.getIngredients().add(ingredient2);
 
+        ingredient.setRecipe(recipe);
+        ingredient2.setRecipe(recipe);
         //when
         RecipeCommand command = converter.convert(recipe);
 
